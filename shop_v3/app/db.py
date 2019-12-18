@@ -1,6 +1,14 @@
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db, login
-from flask_login import UserMixin
+# from app import db, login
+from flask_login import UserMixin, LoginManager
+
+db = SQLAlchemy()
+migrate = Migrate()
+login = LoginManager()
+login.login_view = 'login'
+headers = {'Content-Type': 'text/html; charset=utf-8'}
 
 
 class Users(UserMixin, db.Model):
