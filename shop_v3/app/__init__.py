@@ -1,5 +1,5 @@
 from flask import Flask
-from app.db import db, migrate, login, user_1, user_2
+from app.db import db, migrate, login, user_1, user_2, shop_1, shop_2, product_1, product_2
 from config import Config, get_config
 from app.auth import api_bp as auth_bp
 from app.shops import api_bp as shops_bp
@@ -25,6 +25,11 @@ def create_app(env="DEFAULT"):
         """Some default data"""
         db.session.add(user_1)
         db.session.add(user_2)
+        db.session.add(shop_1)
+        db.session.add(shop_2)
+        db.session.add(product_1)
+        db.session.add(product_2)
+        shop_1.products.append(product_2)
         db.session.commit()
 
     return app

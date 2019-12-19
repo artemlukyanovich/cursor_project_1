@@ -1,14 +1,20 @@
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-# from app import db, login
-from flask_login import UserMixin, LoginManager, current_user
+from flask_login import UserMixin, LoginManager
 
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'login'
 headers = {'Content-Type': 'text/html; charset=utf-8'}
+
+
+shops_products = db.Table(
+    'shops_products',
+    db.Column('shop_id', db.Integer, db.ForeignKey('shops.id')),
+    db.Column('product_id', db.Integer, db.ForeignKey('products.id'))
+)
 
 
 class Users(UserMixin, db.Model):
@@ -19,7 +25,7 @@ class Users(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return self.username
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -38,10 +44,11 @@ class Shops(db.Model):
     name = db.Column(db.String(64), index=True)
     city = db.Column(db.String(64), index=True)
     owner = db.Column(db.String(64), index=True)
-    # products
+    products = db.relationship('Products', secondary=shops_products, backref='shops')
 
     def __repr__(self):
-        return '<Shop {}>'.format(self.name)
+        # return '<Shop {}>'.format(self.name)
+        return self.name
 
 
 class Products(db.Model):
@@ -53,7 +60,7 @@ class Products(db.Model):
     # shops
 
     def __repr__(self):
-        return '<Product {}>'.format(self.name)
+        return self.name
 
 
 category_list = [('for_men', 'For Men'), ('for_women', 'For Women')]
@@ -63,3 +70,10 @@ user_1 = Users(username='admin', email='admin@shop.com',
 user_2 = Users(username='user', email='user@shop.com',
               password_hash=generate_password_hash('password'))
 
+shop_1 = Shops(name="Shop 1", city="Kiev", owner="Artem")
+shop_2 = Shops(name="Shop 2", city="Lviv", owner="Ivan")
+
+product_1 = Products(name="Cocosas", category='for_men', definition='Just cocosas',
+                     img_path='app/static/products/cocosas.jpg')
+product_2 = Products(name="Big Cocosas", category='for_men', definition='Just very big cocosas',
+                     img_path='app/static/products/cocosas.jpg')
