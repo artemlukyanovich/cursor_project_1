@@ -1,33 +1,18 @@
 from flask import Flask
-
-from app.db import db, migrate, login
+from app.db import db, migrate, login, user_1, user_2
 from config import Config, get_config
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager
 from app.auth import api_bp as auth_bp
+from app.shops import api_bp as shops_bp
+from app.products import api_bp as products_bp
 
-
-# def create_app(env="DEFAULT"):
-#     app = Flask(__name__)
-#     app.config.from_object(Config)
-#     db = SQLAlchemy(app)
-#     migrate = Migrate(app, db)
-#     login = LoginManager(app)
-#     login.login_view = 'login'
-#
-#     app.register_blueprint(auth_bp)
-#
-#     with app.app_context():
-#         db.create_all()
-#
-#     return app
 
 def create_app(env="DEFAULT"):
     app = Flask(__name__)
     app.config.from_object(get_config(env))
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(shops_bp)
+    app.register_blueprint(products_bp)
 
     db.init_app(app)
     login.init_app(app)
@@ -37,6 +22,10 @@ def create_app(env="DEFAULT"):
 
     with app.app_context():
         db.create_all()
+        """Some default data"""
+        db.session.add(user_1)
+        db.session.add(user_2)
+        db.session.commit()
 
     return app
 

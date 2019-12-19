@@ -13,7 +13,11 @@
     {% if current_user.is_anonymous %}
     <a href="{{ url_for('auth.login') }}">Login</a>
     {% else %}
-    <a href="{{ url_for('auth.index') }}">Logout</a>
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+    {% endif %}
+    {% if current_user.position == 'admin' %}
+    <a href="{{ url_for('shops.addshop') }}">Add Shop</a>
+    <a href="{{ url_for('products.addproduct') }}">Add Product</a>
     {% endif %}
 </div>
         <hr>
