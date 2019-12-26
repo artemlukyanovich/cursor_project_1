@@ -12,13 +12,6 @@
             {% endfor %}
         </p>
         <p>
-            {{ form.category.label }}<br>
-            {{ form.category(style="width: 300px") }}<br>
-            {% for error in form.category.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
             {{ form.price_from.label }}<br>
             {{ form.price_from(size=5) }} -
             {{ form.price_to(size=5) }}<br>
@@ -29,16 +22,32 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
+        <p>
+            {{ form.category.label }}<br>
+            {{ form.category(style="width: 300px") }}<br>
+            {% for error in form.category.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.shop.label }}<br>
+            {{ form.shop(style="width: 300px") }}<br>
+            {% for error in form.shop.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
         <p>{{ form.submit() }}</p>
     </form>
 
     {% for product in products %}
     <div class="card-body">
         <img src="{{ product.img_path[4:] }}" alt="{{ product.name }}" height="300">
-        <div>
-            <h4 class="card-title">{{ product.name }}</h4>
-            <p>Price: {{ product.price }}</p>
-        </div>
+        <h4 class="card-title">{{ product.name }}</h4>
+        <h4>Price: {{ product.price }}</h4>
+        <p>{{ product.definition }}<p>
+        {% if product.shops != [] %}
+        <p>Available in: {{ product.shops | join(', ') }}<p>
+        {% endif %}
     </div>
         </br>
     {% endfor %}
