@@ -10,12 +10,14 @@
 <div>
     Shop:
     <a href="{{ url_for('auth.index') }}">Home</a>
+    <a href="{{ url_for('products.showproducts') }}">Products</a>
     {% if current_user.is_anonymous %}
     <a href="{{ url_for('auth.login') }}">Login</a>
     {% else %}
     <a href="{{ url_for('auth.logout') }}">Logout</a>
     {% endif %}
     {% if current_user.position == 'admin' %}
+    </br> Admin:
     <a href="{{ url_for('shops.addshop') }}">Add Shop</a>
     <a href="{{ url_for('products.addproduct') }}">Add Product</a>
     <a href="{{ url_for('shops.producttoshop') }}">Add Product to Shop</a>

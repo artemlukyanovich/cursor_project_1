@@ -55,7 +55,8 @@ class Products(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(64), index=True)
     category = db.Column(db.String(64), index=True)
-    definition = db.Column(db.String(256), index=True)
+    definition = db.Column(db.String(256))
+    price = db.Column(db.Integer, index=True)
     img_path = db.Column(db.String(256))
     # shops
 
@@ -73,7 +74,7 @@ user_2 = Users(username='user', email='user@shop.com',
 shop_1 = Shops(name="Shop 1", city="Kiev", owner="Artem")
 shop_2 = Shops(name="Shop 2", city="Lviv", owner="Ivan")
 
-product_1 = Products(name="Cocosas", category='for_men', definition='Just cocosas',
-                     img_path='app/static/products/cocosas.jpg')
-product_2 = Products(name="Big Cocosas", category='for_men', definition='Just very big cocosas',
-                     img_path='app/static/products/cocosas.jpg')
+product_1 = Products(name="Cocosas", category='for_men', definition='Just coconuts', price=15,
+                     img_path='app/static/products/default1.jpg')
+product_2 = Products(name="Apelsinas", category='for_women', definition='Just oranges', price=5,
+                     img_path='app/static/products/default2.jpg')

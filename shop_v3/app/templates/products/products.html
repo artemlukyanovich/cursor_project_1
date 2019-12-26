@@ -1,16 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Add Product</h1>
-    <form action="" method="post" novalidate enctype="multipart/form-data">
+    <h1>Products</h1>
+        <form action="" method="post" novalidate enctype="multipart/form-data">
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.image.label }}<br>
-            {{ form.image }}<br>
-            {% for error in form.image.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
         <p>
             {{ form.name.label }}<br>
             {{ form.name(size=32) }}<br>
@@ -26,19 +19,27 @@
             {% endfor %}
         </p>
         <p>
-            {{ form.definition.label }}<br>
-            {{ form.definition(style="width: 300px; height: 75px") }}<br>
-            {% for error in form.definition.errors %}
+            {{ form.price_from.label }}<br>
+            {{ form.price_from(size=5) }} -
+            {{ form.price_to(size=5) }}<br>
+            {% for error in form.price_from.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.price.label }}<br>
-            {{ form.price(size=32) }}<br>
-            {% for error in form.price.errors %}
+            {% for error in form.price_to.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>{{ form.submit() }}</p>
     </form>
+
+    {% for product in products %}
+    <div class="card-body">
+        <img src="{{ product.img_path[4:] }}" alt="{{ product.name }}" height="300">
+        <div>
+            <h4 class="card-title">{{ product.name }}</h4>
+            <p>Price: {{ product.price }}</p>
+        </div>
+    </div>
+        </br>
+    {% endfor %}
 {% endblock %}
