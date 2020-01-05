@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+        {% for purchase in purchase_list %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                    Order ID: {{ purchase.id }}
+                    {% for product in eval(purchase.cart_list) %}
+                        <tr>
+                            {% for name, values in product.items() %}
+                                <td>{{ name }}</td>
+                                <td>{{ values['quantity'] }}</td>
+                                <td>${{ fix(values['price']) }}</td>
+                                <td>${{ fix(values['total']) }}</td>
+                                <td>${{ fix(values['total']) }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h4>Total amount: ${{ fix(purchase.total) }}</h4>
+            </br>
+        {% endfor %}
+        <h3>You spent ${{ fix(spent) }}</h3>
+{% endblock %}

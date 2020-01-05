@@ -5,8 +5,8 @@ from flask_login import current_user
 from flask_restful import Resource
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
-from app.db import db, headers, Products
-from app.products.forms import AddProductForm, SearchForm, CartForm
+from app.db import db, headers, Products, Purchases
+from app.products.forms import AddProductForm, SearchForm, ProductForm
 
 
 def fix(num, digits=2):
@@ -77,13 +77,13 @@ class ShowProducts(Resource):
 class ShowProductDetails(Resource):
     def get(self, id):
         product = Products.query.get(id)
-        form = CartForm()
+        form = ProductForm()
         return make_response(render_template("products/product_details.html", product=product,
                                              title=Products.query.get(id).name, form=form, fix=fix), 200, headers)
 
     def post(self, id):
         product = Products.query.get(id)
-        form = CartForm()
+        form = ProductForm()
 
         if form.validate_on_submit():
             # Checks to see if the user has already started a cart.
@@ -91,7 +91,7 @@ class ShowProductDetails(Resource):
                 # If the product is not in the cart, then add it.
                 if not any(product.name in d.keys() for d in session['cart']):
                     session['cart'].append({product.name: {'quantity': form.quantity.data, 'price': product.price,
-                                                           'total': form.quantity.data * product.price}})
+                                                           'total': form.quantity.data*product.price}})
 
                 # If the product is already in the cart, update the quantity
                 elif any(product.name in p.keys() for p in session['cart']):
@@ -99,6 +99,7 @@ class ShowProductDetails(Resource):
                     for p in session['cart']:
                         if product.name in p.keys():
                             p[product.name]['quantity'] = form.quantity.data
+                            p[product.name]['total'] = form.quantity.data*product.price
                     # d.update((k, form.quantity.data) for k, v in d.items() if k == product.name)
 
             else:
@@ -113,16 +114,34 @@ class ShowProductDetails(Resource):
                                              title=Products.query.get(id).name, form=form), 200, headers)
 
 
+def get_total(value):
+    total = 0
+    for p in value:
+        for i, j in p.items():
+            total += j['total']
+    return total
+
+
 class ShoppingCart(Resource):
     def get(self):
-        ids_in_cart = session.get('cart', [])
-        id2_count = len(ids_in_cart)
-        return make_response(render_template("products/cart.html", id2=id2_count,
-                                             title="Cart", products=session['cart'], fix=fix), 200, headers)
+        cart_list = session['cart']
+        total = get_total(cart_list)
+        return make_response(render_template("products/cart.html",
+                                             title="Cart", products=cart_list, total=total, fix=fix), 200, headers)
 
 
 class Checkout(Resource):
     def get(self):
+        # user_id = 1
+        # cart_list = 'x'
+        total = 2
+        user_id = current_user.id
+        cart_list = (session['cart'])
+        total = get_total(cart_list)
+        cart_list = str(cart_list)  # use eval() to convert it back
+        purchase = Purchases(user_id=user_id, cart_list=cart_list, total=total)
+        db.session.add(purchase)
+        db.session.commit()
         flash("Successfully paid.")
         return redirect("/products")
 
@@ -132,3 +151,15 @@ class Clear(Resource):
         session['cart'].clear()
         flash("Successfully cleared.")
         return redirect("/products")
+
+
+class PurchaseHistory(Resource):
+    def get(self):
+        purchase_list = Purchases.query.filter(Purchases.user_id == current_user.id)
+        # spent = db.session.query(func.sum(Purchases.total))
+        spent = 0
+        for p in purchase_list:
+            spent += p.total
+        return make_response(render_template("products/purchase_history.html",
+                                             title="Purchase History", purchase_list=purchase_list, spent=spent,
+                                             fix=fix, eval=eval), 200, headers)

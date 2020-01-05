@@ -30,7 +30,7 @@ class SearchForm(FlaskForm):
     submit = SubmitField('Filter')
 
 
-class CartForm(FlaskForm):
+class ProductForm(FlaskForm):
     quantity = IntegerField('Quantity', validators=[DataRequired()])
     submit = SubmitField('Add to Cart')
 

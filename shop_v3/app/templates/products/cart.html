@@ -23,17 +23,12 @@
                 {% endfor %}
             </tr>
 
-{#            <tr>#}
-{#                {% for x in product %}#}
-{#                    <td>{{ x }}</td>#}
-{#                {% endfor %}#}
-{#            </tr>#}
         {% endfor %}
 
         </tbody>
     </table>
 
-    <h3>Total: $27.00</h3>
+    <h3>Total: ${{ fix(total) }}</h3>
 
     <a href="{{ url_for('products.checkout') }}" class="btn btn-large btn-primary">Check Out</a></br>
     <a href="{{ url_for('products.clear') }}" class="btn btn-large btn-primary">Clear</a></br>

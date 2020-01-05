@@ -23,6 +23,7 @@ class Users(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     position = db.Column(db.String(64), default="user")
     password_hash = db.Column(db.String(128))
+    purchases = db.relationship('Purchases', backref='user')
 
     def __repr__(self):
         return self.username
@@ -66,11 +67,18 @@ class Products(db.Model):
 
 class Categories(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(64), index=True, unique=True)
+    name = db.Column(db.String(64), index=True, unique=True, nullable=False)
     products = db.relationship('Products', backref='category')
 
     def __repr__(self):
         return self.name
+
+
+class Purchases(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
+    cart_list = db.Column(db.String, nullable=False)
+    total = db.Column(db.Float, index=True, nullable=False)
 
 
 # category_list = [('for_men', 'For Men'), ('for_women', 'For Women')]

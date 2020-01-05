@@ -12,16 +12,17 @@
     <a href="{{ url_for('auth.index') }}">Home</a>
     <a href="{{ url_for('products.showproducts') }}">Products</a>
     <a href="{{ url_for('products.shoppingcart') }}">Cart</a>
-    {% if current_user.is_anonymous %}
-    <a href="{{ url_for('auth.login') }}">Login</a>
+    {% if not current_user.is_anonymous %}
+        <a href="{{ url_for('products.purchasehistory') }}">Purchase History</a>
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
     {% else %}
-    <a href="{{ url_for('auth.logout') }}">Logout</a>
+        <a href="{{ url_for('auth.login') }}">Login</a>
     {% endif %}
     {% if current_user.position == 'admin' %}
-    </br> Admin:
-    <a href="{{ url_for('shops.addshop') }}">Add Shop</a>
-    <a href="{{ url_for('products.addproduct') }}">Add Product</a>
-    <a href="{{ url_for('shops.producttoshop') }}">Add Product to Shop</a>
+        </br> Admin:
+        <a href="{{ url_for('shops.addshop') }}">Add Shop</a>
+        <a href="{{ url_for('products.addproduct') }}">Add Product</a>
+        <a href="{{ url_for('shops.producttoshop') }}">Add Product to Shop</a>
     {% endif %}
 </div>
         <hr>

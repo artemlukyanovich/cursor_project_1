@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask_restful import Api
-from app.products.resource import AddProduct, ShowProducts, ShowProductDetails, ShoppingCart, Checkout, Clear
+from app.products.resource import AddProduct, ShowProducts, ShowProductDetails, ShoppingCart, Checkout, Clear, \
+    PurchaseHistory
 
 api_bp = Blueprint('products', __name__)
 api = Api(api_bp)
@@ -12,4 +13,5 @@ api.add_resource(ShoppingCart, '/cart')
 # api.add_resource(AddToCart, '/cart/<int:id>')
 api.add_resource(Checkout, '/checkout')
 api.add_resource(Clear, '/clear')
+api.add_resource(PurchaseHistory, '/purchase_history')
 
