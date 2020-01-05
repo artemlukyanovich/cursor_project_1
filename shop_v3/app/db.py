@@ -76,6 +76,7 @@ class Categories(db.Model):
 
 class Purchases(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    date = db.Column(db.DateTime, index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
     cart_list = db.Column(db.String, nullable=False)
     total = db.Column(db.Float, index=True, nullable=False)

@@ -15,7 +15,8 @@
                 </thead>
                 <tbody>
 
-                    Order ID: {{ purchase.id }}
+                    Order ID: {{ purchase.id }} </br>
+                    Date: {{ purchase.date.strftime("%m.%d.%Y, %H:%M:%S") }}
                     {% for product in eval(purchase.cart_list) %}
                         <tr>
                             {% for name, values in product.items() %}

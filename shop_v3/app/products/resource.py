@@ -1,4 +1,7 @@
 import os
+from datetime import datetime
+from time import strftime
+
 import sqlalchemy
 from flask import render_template, flash, redirect, url_for, make_response, session, app
 from flask_login import current_user
@@ -136,10 +139,12 @@ class Checkout(Resource):
         # cart_list = 'x'
         total = 2
         user_id = current_user.id
+        date = datetime.now()
+        print(date.strftime("%m.%d.%Y, %H:%M:%S"))
         cart_list = (session['cart'])
         total = get_total(cart_list)
         cart_list = str(cart_list)  # use eval() to convert it back
-        purchase = Purchases(user_id=user_id, cart_list=cart_list, total=total)
+        purchase = Purchases(user_id=user_id, date=date, cart_list=cart_list, total=total)
         db.session.add(purchase)
         db.session.commit()
         flash("Successfully paid.")
@@ -162,4 +167,4 @@ class PurchaseHistory(Resource):
             spent += p.total
         return make_response(render_template("products/purchase_history.html",
                                              title="Purchase History", purchase_list=purchase_list, spent=spent,
-                                             fix=fix, eval=eval), 200, headers)
+                                             fix=fix, eval=eval, strftime=strftime), 200, headers)
