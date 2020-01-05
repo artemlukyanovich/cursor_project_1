@@ -11,6 +11,7 @@
     Shop:
     <a href="{{ url_for('auth.index') }}">Home</a>
     <a href="{{ url_for('products.showproducts') }}">Products</a>
+    <a href="{{ url_for('products.shoppingcart') }}">Cart</a>
     {% if current_user.is_anonymous %}
     <a href="{{ url_for('auth.login') }}">Login</a>
     {% else %}

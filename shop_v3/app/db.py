@@ -56,7 +56,7 @@ class Products(db.Model):
     name = db.Column(db.String(64), index=True, unique=True)
     category_name = db.Column(db.String(64), db.ForeignKey('categories.name'), index=True)
     definition = db.Column(db.String(256))
-    price = db.Column(db.Integer, index=True)
+    price = db.Column(db.Float, index=True)
     img_path = db.Column(db.String(256))
     # shops
 
@@ -86,7 +86,7 @@ shop_2 = Shops(name="Shop 2", city="Lviv", owner="Ivan")
 category_1 = Categories(name="For Men")
 category_2 = Categories(name="For Women")
 
-product_1 = Products(name="Cocosas", category_name='For Men', definition='Just coconuts', price=15,
+product_1 = Products(name="Cocosas", category_name='For Men', definition='Just coconuts', price=15.00,
                      img_path='app/static/products/default1.jpg')
-product_2 = Products(name="Apelsinas", category_name='For Women', definition='Just oranges', price=5,
+product_2 = Products(name="Apelsinas", category_name='For Women', definition='Just oranges', price=5.00,
                      img_path='app/static/products/default2.jpg')

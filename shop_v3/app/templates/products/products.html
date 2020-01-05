@@ -41,12 +41,14 @@
 
     {% for product in products %}
     <div class="card-body">
-        <img src="{{ product.img_path[4:] }}" alt="{{ product.name }}" height="300">
-        <h4 class="card-title">{{ product.name }}</h4>
-        <h4>Price: {{ product.price }}</h4>
-        <p>{{ product.definition }}<p>
+        <img src="/{{ product.img_path[4:] }}" alt="{{ product.name }}" height="300">
+        <h4 class="card-title"><a href="{{ url_for('products.showproductdetails', id=product.id) }}">
+            {{ product.name }}</a></h4>
+        <h4>Price: ${{ fix(product.price) }}</h4>
+{#        <p>{{ product.definition }}<p>#}
         {% if product.shops != [] %}
         <p>Available in: {{ product.shops | join(', ') }}<p>
+{#        <a class="btn btn-primary" href="{{ url_for('products.addtocart',  id=product.id) }}">Add to Cart</a>#}
         {% endif %}
     </div>
         </br>

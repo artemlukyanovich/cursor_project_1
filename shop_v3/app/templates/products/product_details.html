@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ product.name }}</h1>
+
+    <div class="card-body">
+        <img src="/{{ product.img_path[4:] }}" alt="{{ product.name }}" height="300">
+        <h4 class="card-title">{{ product.name }}</h4>
+        <h4>Price: ${{ fix(product.price) }}</h4>
+        <p>{{ product.definition }}<p>
+        {% if product.shops != [] %}
+        <p>Available in: {{ product.shops | join(', ') }}<p>
+        {% endif %}
+{#        <a class="btn btn-primary" href="{{ url_for('products.addtocart',  id=product.id) }}">Add to Cart</a>#}
+    </div>
+    </br>
+    <form action="" method="post" novalidate enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.quantity.label }}<br>
+            {{ form.quantity(size=3) }}<br>
+            {% for error in form.quantity.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>{{ form.submit() }}</p>
+    </form>
+        </br>
+{% endblock %}
