@@ -89,28 +89,22 @@ class ShowProductDetails(Resource):
             # Checks to see if the user has already started a cart.
             if 'cart' in session:
                 # If the product is not in the cart, then add it.
-                print('1')
-                print(session['cart'])
                 if not any(product.name in d.keys() for d in session['cart']):
                     session['cart'].append({product.name: {'quantity': form.quantity.data, 'price': product.price,
                                                            'total': form.quantity.data * product.price}})
-                    # return 'hi'
-                    print('1.1')
-                    print(session['cart'])
 
                 # If the product is already in the cart, update the quantity
-                elif any(product.name in d.keys() for d in session['cart']):
-                    for d in session['cart']:
-                        d[product.name]['quantity'] = form.quantity.data
-                        # d.update((k, form.quantity.data) for k, v in d.items() if k == product.name)
-                        print('1.2')
-                        print(session['cart'])
+                elif any(product.name in p.keys() for p in session['cart']):
+                    print(session['cart'])
+                    for p in session['cart']:
+                        if product.name in p.keys():
+                            p[product.name]['quantity'] = form.quantity.data
+                    # d.update((k, form.quantity.data) for k, v in d.items() if k == product.name)
 
             else:
                 # In this block, the user has not started a cart, so we start it for them and add the product.
-                session['cart'] = [{product.name: form.quantity.data}]
-                print('1.3')
-                print(session['cart'])
+                session['cart'] = [{product.name: {'quantity': form.quantity.data, 'price': product.price,
+                                                  'total': form.quantity.data * product.price}}]
 
             flash("Successfully added to cart.")
             return redirect("/cart")
