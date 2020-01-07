@@ -71,10 +71,10 @@ class ShowProducts(Resource):
                 products = products.filter(Products.shops.contains(form.shop.data))
             print(type(form.shop.data))
             return make_response(render_template("products/products.html", products=products,
-                                                 title='Products', form=form), 200, headers)
+                                                 title='Products', form=form, fix=fix), 200, headers)
         print(form.errors)
         return make_response(render_template("products/products.html", products=products,
-                                             title='Products', form=form), 200, headers)
+                                             title='Products', form=form, fix=fix), 200, headers)
 
 
 class ShowProductDetails(Resource):
@@ -114,7 +114,7 @@ class ShowProductDetails(Resource):
             return redirect("/cart")
 
         return make_response(render_template("products/product_details.html", product=product,
-                                             title=Products.query.get(id).name, form=form), 200, headers)
+                                             title=Products.query.get(id).name, form=form, fix=fix), 200, headers)
 
 
 def get_total(value):
