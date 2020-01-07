@@ -1,0 +1,8 @@
+.idea/
+__pycache__/
+.gitignore
+*.pyc
+venv
+apartments_reservation
+shop
+shop_v2
