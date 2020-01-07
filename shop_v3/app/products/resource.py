@@ -93,22 +93,22 @@ class ShowProductDetails(Resource):
             if 'cart' in session:
                 # If the product is not in the cart, then add it.
                 if not any(product.name in d.keys() for d in session['cart']):
-                    session['cart'].append({product.name: {'quantity': form.quantity.data, 'price': product.price,
-                                                           'total': form.quantity.data*product.price}})
+                    session['cart'].append({product.name: {'q': form.quantity.data, 'p': product.price,
+                                                           't': form.quantity.data*product.price}})
 
                 # If the product is already in the cart, update the quantity
                 elif any(product.name in p.keys() for p in session['cart']):
                     print(session['cart'])
                     for p in session['cart']:
                         if product.name in p.keys():
-                            p[product.name]['quantity'] = form.quantity.data
-                            p[product.name]['total'] = form.quantity.data*product.price
+                            p[product.name]['q'] = form.quantity.data
+                            p[product.name]['t'] = form.quantity.data*product.price
                     # d.update((k, form.quantity.data) for k, v in d.items() if k == product.name)
 
             else:
                 # In this block, the user has not started a cart, so we start it for them and add the product.
-                session['cart'] = [{product.name: {'quantity': form.quantity.data, 'price': product.price,
-                                                  'total': form.quantity.data * product.price}}]
+                session['cart'] = [{product.name: {'q': form.quantity.data, 'p': product.price,
+                                                   't': form.quantity.data * product.price}}]
 
             flash("Successfully added to cart.")
             return redirect("/cart")
@@ -121,7 +121,7 @@ def get_total(value):
     total = 0
     for p in value:
         for i, j in p.items():
-            total += j['total']
+            total += j['t']
     return total
 
 
@@ -135,12 +135,9 @@ class ShoppingCart(Resource):
 
 class Checkout(Resource):
     def get(self):
-        # user_id = 1
-        # cart_list = 'x'
         total = 2
         user_id = current_user.id
         date = datetime.now()
-        print(date.strftime("%m.%d.%Y, %H:%M:%S"))
         cart_list = (session['cart'])
         total = get_total(cart_list)
         cart_list = str(cart_list)  # use eval() to convert it back
@@ -148,6 +145,7 @@ class Checkout(Resource):
         db.session.add(purchase)
         db.session.commit()
         flash("Successfully paid.")
+        session['cart'].clear()
         return redirect("/products")
 
 

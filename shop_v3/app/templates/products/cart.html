@@ -17,9 +17,9 @@
             <tr>
                 {% for name, values in product.items() %}
                     <td>{{ name }}</td>
-                    <td>{{ values['quantity'] }}</td>
-                    <td>${{ fix(values['price']) }}</td>
-                    <td>${{ fix(values['total']) }}</td>
+                    <td>{{ values['q'] }}</td>
+                    <td>${{ fix(values['p']) }}</td>
+                    <td>${{ fix(values['t']) }}</td>
                 {% endfor %}
             </tr>
 
