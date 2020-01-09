@@ -136,12 +136,15 @@ class ShoppingCart(Resource):
 class Checkout(Resource):
     def get(self):
         total = 2
-        user_id = current_user.id
         date = datetime.now()
         cart_list = (session['cart'])
         total = get_total(cart_list)
         cart_list = str(cart_list)  # use eval() to convert it back
-        purchase = Purchases(user_id=user_id, date=date, cart_list=cart_list, total=total)
+        if current_user.is_authenticated:
+            user_id = current_user.id
+            purchase = Purchases(user_id=user_id, date=date, cart_list=cart_list, total=total)
+        else:
+            purchase = Purchases(date=date, cart_list=cart_list, total=total)
         db.session.add(purchase)
         db.session.commit()
         flash("Successfully paid.")
